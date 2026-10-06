@@ -80,4 +80,3 @@ The settings are listed at the top of `analysis/detect_change.py`.
 
 Contains modified Copernicus Sentinel data (2023, 2026). Sentinel-2 L2A imagery from the European Space Agency and the Copernicus programme, free and open.
 
-Built with the help of Claude (Anthropic) for the analysis code and the dashboard.
