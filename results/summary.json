@@ -1,0 +1,10 @@
+{
+  "checked_share_pct": 87.7,
+  "vegetation_before_ha": 17466,
+  "new_bare_ground_ha": 624,
+  "new_bare_ground_pct_of_vegetation": 3.6,
+  "hotspots": 192,
+  "hotspots_over_5_ha": 30,
+  "hotspots_over_20_ha": 4,
+  "top10_share_pct": 42
+}

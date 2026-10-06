@@ -1,0 +1,7 @@
+# raw satellite downloads are large and not needed in the repo
+data/
+*.zip
+*.tif
+*.tiff
+__pycache__/
+.DS_Store

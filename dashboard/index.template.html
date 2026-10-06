@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EcoSentinel AI</title>
+<script>(function(){try{var m=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',m?'dark':'light');}catch(e){}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F5F1; --surface:#FFFFFF; --surface2:#EBF0EB; --line:rgba(15,40,28,.12);
+  --text:#0E1A13; --muted:#566A5E;
+  --accent:#0A8F5B; --accent-ink:#FFFFFF; --accent-soft:rgba(10,143,91,.12);
+  --danger:#D92D4B; --danger-soft:rgba(217,45,75,.12);
+  --warn:#B86E00; --warn-soft:rgba(184,110,0,.14);
+  --stage:#0A120D; --shadow:0 10px 30px rgba(10,30,20,.10);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#060C09; --surface:#0D1711; --surface2:#142119; --line:rgba(190,255,220,.10);
+    --text:#E7F3EB; --muted:#8CA396;
+    --accent:#4DEBA0; --accent-ink:#04140C; --accent-soft:rgba(77,235,160,.12);
+    --danger:#FF5A76; --danger-soft:rgba(255,90,118,.14);
+    --warn:#FFB84D; --warn-soft:rgba(255,184,77,.14);
+    --stage:#050A07; --shadow:0 12px 34px rgba(0,0,0,.45);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#060C09; --surface:#0D1711; --surface2:#142119; --line:rgba(190,255,220,.10);
+  --text:#E7F3EB; --muted:#8CA396;
+  --accent:#4DEBA0; --accent-ink:#04140C; --accent-soft:rgba(77,235,160,.12);
+  --danger:#FF5A76; --danger-soft:rgba(255,90,118,.14);
+  --warn:#FFB84D; --warn-soft:rgba(255,184,77,.14);
+  --stage:#050A07; --shadow:0 12px 34px rgba(0,0,0,.45);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--text);font:400 15px/1.55 'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Bricolage Grotesque','Manrope',system-ui,sans-serif;margin:0;letter-spacing:-.02em;line-height:1.08}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+.mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+
+/* header */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px}
+.brand{display:flex;align-items:center;gap:10px;font:800 19px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
+.brand svg{color:var(--accent)}
+.brand b{color:var(--accent)}
+.bar-r{display:flex;align-items:center;gap:10px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;font-size:11.5px;letter-spacing:.06em;color:var(--muted);background:var(--surface)}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:inline-flex;align-items:center;justify-content:center}
+
+/* hero */
+.hero{padding:26px 20px 6px}
+.eyebrow{font:500 12px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+h1{font-size:clamp(40px,7.2vw,88px);font-weight:800;max-width:14ch}
+.hl{color:var(--accent)}
+.lede{max-width:60ch;margin-top:18px;font-size:clamp(16px,1.6vw,19px);color:var(--muted)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:28px;margin-bottom:22px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 18px 16px;box-shadow:var(--shadow)}
+.stat .k{display:flex;align-items:baseline;gap:6px;font:800 clamp(34px,4.4vw,52px)/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.03em}
+.stat .u{font-size:.45em;color:var(--accent);font-weight:700}
+.stat .l{margin-top:8px;font-weight:700}
+.stat .s{margin-top:2px;font-size:13px;color:var(--muted)}
+
+/* layout */
+.main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px 4px}
+.card-h h3{font-size:19px}
+.side{display:flex;flex-direction:column;gap:18px;min-width:0}
+
+/* viewer */
+.viewer{overflow:hidden}
+.tb{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.seg{display:inline-flex;background:var(--surface2);border-radius:12px;padding:3px}
+.seg button{border:0;background:none;padding:7px 12px;border-radius:9px;font-weight:700;font-size:13px;color:var(--muted)}
+.seg button.on{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.tgs{display:flex;flex-wrap:wrap;gap:6px}
+.tg{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:none;border-radius:999px;padding:6px 11px;font-size:13px;font-weight:700;color:var(--muted)}
+.tg.on{color:var(--text);border-color:var(--accent);background:var(--accent-soft)}
+.sw{display:inline-block;width:11px;height:11px;border-radius:3px}
+.sw-red{background:#FF4060}
+.sw-pin{background:var(--warn);border-radius:50%}
+.sw-hatch{background:repeating-linear-gradient(135deg,#9bb2c6 0 2px,transparent 2px 4px)}
+.zoom{display:flex;gap:6px}
+.zoom button{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface2);font-weight:700;font-size:17px;line-height:1}
+.stage{position:relative;aspect-ratio:2.2/1;min-height:320px;max-height:78vh;background:var(--stage);overflow:hidden;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.stage.grab{cursor:grabbing}
+.world{position:absolute;left:0;top:0;width:2500px;height:950px;transform-origin:0 0;will-change:transform}
+.world.fly{transition:transform .75s cubic-bezier(.2,.8,.2,1)}
+.world img{position:absolute;left:0;top:0;width:2500px;height:950px;display:block;pointer-events:none;-webkit-user-drag:none;user-select:none}
+.lay{position:absolute;left:0;top:0;width:2500px;height:950px}
+.lay.b{clip-path:inset(0 0 0 50%)}
+.stage[data-mode="tc"] .ndvi,.stage[data-mode="ndvi"] .tc{display:none}
+.stage[data-change="off"] .change,.stage[data-mask="off"] .mask{display:none}
+.stage[data-pins="off"] .pins{display:none}
+.change.reveal{animation:reveal 2.6s cubic-bezier(.4,0,.2,1) both}
+@keyframes reveal{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.scanline{position:absolute;top:0;bottom:0;left:-10px;width:calc(4px / var(--s,1));background:var(--accent);box-shadow:0 0 calc(26px / var(--s,1)) calc(3px / var(--s,1)) var(--accent);opacity:0;pointer-events:none}
+.scanline.go{animation:scan 2.6s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes scan{0%{left:0;opacity:1}98%{opacity:1}100%{left:100%;opacity:0}}
+.pins{position:absolute;left:0;top:0;width:0;height:0}
+.pins.late{opacity:0;animation:fadein .6s 2.3s ease forwards}
+@keyframes fadein{to{opacity:1}}
+.pin{position:absolute;width:var(--d,32px);height:var(--d,32px);padding:0;border:0;background:none;transform:translate(-50%,-50%) scale(calc(1 / var(--s,1)));--pc:#FF5A76}
+.pin.k-mine{--pc:#FFB84D}
+.pin .ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--pc);animation:pulse 2.2s ease-out infinite}
+.pin .core{position:absolute;left:50%;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:var(--pc);color:#fff;font:700 11px/22px 'IBM Plex Mono',monospace;text-align:center;font-style:normal;box-shadow:0 0 0 2px rgba(0,0,0,.5)}
+.pin.k-mine .core{color:#2a1700}
+.pin.sel .ring{border-color:#fff;border-width:3px;animation:none}
+.pin.sel .core{background:#fff;color:#0b1a12}
+@keyframes pulse{0%{transform:scale(.5);opacity:.95}100%{transform:scale(1.15);opacity:0}}
+.handle{position:absolute;top:0;bottom:0;left:0;width:44px;margin-left:-22px;cursor:ew-resize;touch-action:none;z-index:4}
+.handle.fly{transition:transform .75s cubic-bezier(.2,.8,.2,1)}
+.handle .line{position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.35)}
+.handle .knob{position:absolute;left:50%;top:50%;width:42px;height:42px;margin:-21px 0 0 -21px;border-radius:50%;background:#fff;color:#0b1a12;display:flex;align-items:center;justify-content:center;font:700 14px/1 'Manrope',sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.45);letter-spacing:2px}
+.lbl{position:absolute;top:12px;z-index:3;padding:5px 10px;border-radius:8px;background:rgba(5,10,7,.72);color:#fff;font:500 11.5px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;pointer-events:none}
+.lbl.l{left:12px}.lbl.r{right:12px}
+.badge{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:3;display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;background:rgba(5,10,7,.78);color:#fff;font:500 12px/1 'IBM Plex Mono',monospace;white-space:nowrap;pointer-events:none;max-width:92%}
+.badge i{width:8px;height:8px;border-radius:50%;background:#4DEBA0;box-shadow:0 0 0 4px rgba(77,235,160,.25)}
+.badge.scanning i{animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.2}}
+.legend{position:absolute;right:12px;bottom:12px;z-index:3;display:none;align-items:center;gap:8px;padding:7px 11px;border-radius:10px;background:rgba(5,10,7,.78);color:#fff;font:500 11px/1 'IBM Plex Mono',monospace}
+.legend i{display:block;width:96px;height:8px;border-radius:4px;background:linear-gradient(90deg,#5c361e,#d6b062,#cdcd5a,#34963c,#0a5a2a)}
+.loading{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;background:var(--stage);color:#9fb5a8;font:500 13px/1 'IBM Plex Mono',monospace;letter-spacing:.06em}
+.stage.ready .loading{display:none}
+.toast{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:7;padding:8px 14px;border-radius:10px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+.sb{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.scale{display:inline-flex;align-items:center;gap:8px}
+.scale i{display:block;height:7px;min-width:10px;border:2px solid var(--text);border-top:0}
+.scale b{font:500 12px/1 'IBM Plex Mono',monospace;color:var(--text)}
+
+/* hotspot list */
+.list{display:flex;flex-direction:column;gap:8px;max-height:350px;overflow:auto;padding:10px 12px 12px}
+.hs{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:8px;border-radius:14px;border:1px solid transparent;background:var(--surface2)}
+.hs[aria-current="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.hs img{width:52px;height:52px;border-radius:10px;object-fit:cover;flex:none}
+.hs-main{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.hs-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hs-top b{font-family:'Bricolage Grotesque',sans-serif;font-size:17px}
+.hs-sub{font-size:12px;color:var(--muted)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none;background:transparent;border:2px solid var(--muted)}
+.s-field{background:var(--warn);border-color:var(--warn)}
+.s-confirmed{background:var(--danger);border-color:var(--danger)}
+.s-licensed{background:var(--accent);border-color:var(--accent)}
+.s-dismissed{background:var(--muted);border-color:var(--muted);opacity:.5}
+.chip{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+.pr-high{background:var(--danger-soft);color:var(--danger)}
+.pr-med{background:var(--warn-soft);color:var(--warn)}
+.pr-low{background:var(--accent-soft);color:var(--accent)}
+
+/* detail */
+.detail{padding:16px}
+.d-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.d-head .eyebrow{margin-bottom:8px;font-size:11px}
+.d-head h3{font-size:26px}
+.d-th{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.d-th figure{margin:0;position:relative}
+.d-th img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;display:block}
+.d-th figcaption{position:absolute;left:8px;bottom:8px;padding:3px 8px;border-radius:6px;background:rgba(5,10,7,.75);color:#fff;font:500 11px/1.2 'IBM Plex Mono',monospace}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0 0 12px;font-size:14px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.note{font-size:14px;color:var(--muted);margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface2);font-weight:700;font-size:13px;text-decoration:none;color:var(--text)}
+.btn.sm{padding:3px 9px;font-size:12px}
+.vlabel{font:500 11.5px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vb{padding:9px 10px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);font-weight:700;font-size:13px;text-align:left;display:flex;align-items:center;gap:8px}
+.vb[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+
+/* queue */
+.q{padding:0 0 14px}
+.qbar{display:flex;height:10px;margin:8px 16px 12px;border-radius:6px;overflow:hidden;background:var(--surface2)}
+.qbar i{display:block;height:100%}
+.qlist{list-style:none;margin:0;padding:0 16px;display:flex;flex-direction:column;gap:7px}
+.qlist li{display:flex;align-items:center;gap:10px;font-size:14px}
+.qlist b{margin-left:auto;font-family:'IBM Plex Mono',monospace}
+.q .small{padding:10px 16px 0}
+.link{border:0;background:none;color:var(--muted);font-size:13px;text-decoration:underline}
+
+/* sections */
+.sec{margin-top:44px}
+.sec h2{font-size:clamp(28px,4.2vw,44px);margin-bottom:8px}
+.sec .sub{color:var(--muted);max-width:62ch;margin-bottom:20px}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.step{padding:20px}
+.step .n{display:inline-flex;width:34px;height:34px;border-radius:50%;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);font:700 15px/1 'IBM Plex Mono',monospace;margin-bottom:14px}
+.step h3{font-size:22px;margin-bottom:6px}
+.step p{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chips span{padding:6px 12px;border:1px solid var(--line);border-radius:999px;font:500 12px/1 'IBM Plex Mono',monospace;color:var(--muted);background:var(--surface)}
+.charts{display:grid;grid-template-columns:1.3fr 1fr 1.2fr;gap:14px}
+.chart{padding:18px}
+.chart h3{font-size:19px;margin-bottom:4px}
+.chart .cap{font-size:13px;color:var(--muted);margin-bottom:14px}
+.brow{display:grid;grid-template-columns:30px minmax(0,1fr) 54px;align-items:center;gap:8px;width:100%;border:0;background:none;padding:3px 0;text-align:left}
+.bt{display:block;height:12px;border-radius:6px;background:var(--surface2);overflow:hidden}
+.bt i{display:block;height:100%;border-radius:6px;background:var(--danger)}
+.bt i.k-mine{background:var(--warn)}
+.bn,.bv{font-size:12px;color:var(--muted)}
+.bv{text-align:right}
+.brow:hover .bn{color:var(--text)}
+.donut{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.donut svg{flex:none}
+.leg{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+.leg li{display:flex;align-items:flex-start;gap:8px}
+.leg i{width:11px;height:11px;border-radius:3px;margin-top:5px;flex:none}
+.leg b{font-family:'IBM Plex Mono',monospace;margin-left:4px}
+.srow{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:center;margin-bottom:10px}
+.stack{display:flex;height:26px;border-radius:8px;overflow:hidden;background:var(--surface2)}
+.stack i{display:block;height:100%}
+.sd{background:var(--accent)}.smix{background:var(--muted);opacity:.55}.sbare{background:var(--danger)}
+.callout{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--danger-soft);font-size:14px}
+.callout b{color:var(--danger)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.two .card{padding:20px}
+.two h3{font-size:21px;margin-bottom:10px}
+.two ul{margin:0;padding-left:18px;color:var(--muted);display:flex;flex-direction:column;gap:7px}
+.two li::marker{color:var(--accent)}
+.two .no li::marker{color:var(--danger)}
+footer{margin-top:44px;padding:26px 0 40px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:1040px){
+  .main{grid-template-columns:minmax(0,1fr)}
+  .charts{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .steps,.two,.charts{grid-template-columns:1fr}
+  .wrap{padding:0 14px}
+  .bar{padding:14px}
+  .hero{padding:20px 14px 4px}
+  .pill span{display:none}
+  .stage{aspect-ratio:auto;height:340px}
+  .hint{display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  .pin .ring{animation:none}
+  .change.reveal,.scanline.go{animation:none}
+  .pins.late{animation:none;opacity:1}
+  .world.fly,.handle.fly{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="bar wrap" style="max-width:1280px;margin:0 auto">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"></circle><path d="M9 21c0-7 4-11 15-11 0 9-4 13-11 13-1.8 0-3.2-.7-4-2z" fill="currentColor"></path><path d="M10 24c3-3 6-6 10-9" fill="none" stroke="var(--bg)" stroke-width="1.7" stroke-linecap="round"></path></svg>
+    <span>EcoSentinel <b>AI</b></span>
+  </div>
+  <div class="bar-r">
+    <span class="pill mono"><i></i><span>PILOT &middot; OBUASI&ndash;AMANSIE WEST, GHANA</span></span>
+    <button class="icon-btn" id="themeBtn" aria-label="Switch between light and dark theme">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero wrap">
+  <p class="eyebrow">Satellite early warning for illegal mining</p>
+  <h1>Eyes on <span class="hl">the forest.</span></h1>
+  <p class="lede">EcoSentinel compares satellite images over time, flags forest that has turned into bare ground, ranks the biggest changes, and hands each one to a person who checks it on the ground.</p>
+</section>
+
+<section class="wrap stats" id="stats" aria-label="Key results"></section>
+
+<main class="wrap main">
+  <div class="card viewer">
+    <div class="tb">
+      <div class="seg" role="group" aria-label="Base map">
+        <button class="on" data-mode="tc">True colour</button>
+        <button data-mode="ndvi">Vegetation health</button>
+      </div>
+      <div class="tgs">
+        <button class="tg on" data-layer="change" aria-pressed="true"><i class="sw sw-red"></i>Change</button>
+        <button class="tg on" data-layer="pins" aria-pressed="true"><i class="sw sw-pin"></i>Hotspots</button>
+        <button class="tg" data-layer="mask" aria-pressed="false"><i class="sw sw-hatch"></i>Not checked</button>
+      </div>
+      <div class="zoom">
+        <button id="zin" aria-label="Zoom in">+</button>
+        <button id="zout" aria-label="Zoom out">&minus;</button>
+        <button id="zreset" aria-label="Reset the view">&#x2922;</button>
+      </div>
+    </div>
+    <div class="stage" id="stage" data-mode="tc" data-change="on" data-pins="on" data-mask="off" tabindex="0" aria-label="Satellite comparison of the Obuasi area, January 2023 and January 2026">
+      <div class="world" id="world">
+        <div class="lay a" id="layA"><img class="tc" alt=""><img class="ndvi" alt=""></div>
+        <div class="lay b" id="layB"><img class="tc" alt=""><img class="ndvi" alt=""></div>
+        <img class="change" id="imgChange" alt="">
+        <img class="mask" id="imgMask" alt="">
+        <div class="pins" id="pins"></div>
+        <div class="scanline" id="scan"></div>
+      </div>
+      <div class="handle" id="handle" role="slider" tabindex="0" aria-label="Compare 2023 and 2026" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="line"></span><span class="knob">&lsaquo;&rsaquo;</span></div>
+      <span class="lbl l">JAN 2023</span><span class="lbl r">JAN 2026</span>
+      <div class="badge scanning" id="badge"><i></i><span id="badgeTxt">Scanning 2023 to 2026&hellip;</span></div>
+      <div class="legend" id="legend"><span>bare</span><i></i><span>dense</span></div>
+      <div class="loading" id="loading">LOADING SATELLITE IMAGERY&hellip;</div>
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+    <div class="sb">
+      <span class="mono" id="coords">Move over the map to read coordinates</span>
+      <span class="hint">Drag the line to compare &middot; scroll or pinch to zoom</span>
+      <span class="scale"><i id="scaleBar"></i><b id="scaleTxt"></b></span>
+    </div>
+  </div>
+
+  <aside class="side">
+    <div class="card">
+      <div class="card-h"><h3>Hotspots to verify</h3><span class="mono small muted">ranked by size</span></div>
+      <div class="list" id="list"></div>
+    </div>
+    <div class="card detail" id="detail"></div>
+    <div class="card q" id="queue"></div>
+  </aside>
+</main>
+
+<section class="wrap sec">
+  <h2>How it works</h2>
+  <p class="sub">Three steps, and a person always has the last word.</p>
+  <div class="steps">
+    <div class="card step"><span class="n">1</span><h3>Detect</h3><p>Two Sentinel-2 satellite images of the same ground are compared. Where dense vegetation turns into bare ground, the spot is flagged. Clouds and their shadows are masked out first.</p></div>
+    <div class="card step"><span class="n">2</span><h3>Assess</h3><p>Flags that sit close together become hotspots. Hotspots are ranked by size, so teams can start with the largest changes instead of searching the whole map.</p></div>
+    <div class="card step"><span class="n">3</span><h3>Verify</h3><p>Nothing is acted on automatically. Each hotspot is checked by a person, and the result is recorded: field visit, confirmed illegal, licensed or other, or false alarm.</p></div>
+  </div>
+  <div class="chips mono"><span>Sentinel-2 L2A &middot; 10 m</span><span>31 Jan 2023 vs 25 Jan 2026</span><span>Vegetation index (NDVI) 0.55+ to 0.30 or less</span><span>Patches of 0.25 ha or more</span><span>281 km&sup2; pilot area</span></div>
+</section>
+
+<section class="wrap sec">
+  <h2>What the numbers say</h2>
+  <p class="sub">Measured on real satellite data from the pilot area.</p>
+  <div class="charts">
+    <div class="card chart"><h3>Biggest hotspots</h3><p class="cap">Hectares of new bare ground. Tap a bar to fly to it.</p><div id="bars"></div></div>
+    <div class="card chart"><h3>Where the change is</h3><p class="cap">Share of the new bare ground.</p><div class="donut" id="donut"></div></div>
+    <div class="card chart"><h3>Ground cover, then and now</h3><p class="cap">Share of the area that could be checked on both dates.</p><div id="shares"></div></div>
+  </div>
+</section>
+
+<section class="wrap sec">
+  <h2>Honest about the limits</h2>
+  <p class="sub">This is a working prototype. Here is what it does, and what it cannot do yet.</p>
+  <div class="two">
+    <div class="card"><h3>What it does today</h3><ul>
+      <li>Compares two satellite images of the same 281 km&sup2; area.</li>
+      <li>Flags dense vegetation that became bare ground, and hides cloud and shadow.</li>
+      <li>Groups flags into hotspots and ranks them by size.</li>
+      <li>Keeps track of the human check for every hotspot.</li>
+    </ul></div>
+    <div class="card no"><h3>What it cannot do yet</h3><ul>
+      <li>Tell legal from illegal. That needs the boundaries of licensed mines.</li>
+      <li>See through clouds. <span id="ncp"></span> of the area was not checked in 2023.</li>
+      <li>Say who cleared the land or when. It has two dates only.</li>
+      <li>State its accuracy. It has not yet been tested against field-verified sites.</li>
+    </ul></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>EcoSentinel AI &middot; prototype</span>
+    <span>Contains modified Copernicus Sentinel data (2023, 2026), Sentinel-2 L2A.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var D = __DATA__;
+var W = D.W, H = D.H, ST = D.stats, HS = D.hotspots, B = D.bounds;
+var $ = function(s, r){ return (r||document).querySelector(s); };
+var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+function fmt(n, d){ return Number(n).toLocaleString('en-US', {minimumFractionDigits:d||0, maximumFractionDigits:d||0}); }
+function ll(lat, lon, d){ d = (d==null)?4:d; return Math.abs(lat).toFixed(d)+'\u00B0 '+(lat>=0?'N':'S')+', '+Math.abs(lon).toFixed(d)+'\u00B0 '+(lon>=0?'E':'W'); }
+function pitches(ha){ return Math.round(ha/0.714); }
+function prio(ha){ return ha>=20 ? 'high' : (ha>=10 ? 'med' : 'low'); }
+var PRIO = {high:'High priority', med:'Medium', low:'Lower'};
+var STATUS = {pending:'Not checked yet', field:'Queued for field visit', confirmed:'Confirmed illegal', licensed:'Licensed or other', dismissed:'False alarm'};
+var VOPTS = [['field','Queue field visit'],['confirmed','Confirmed illegal'],['licensed','Licensed or other'],['dismissed','False alarm']];
+
+/* ---------- theme ---------- */
+var root = document.documentElement;
+var themeBtn = $('#themeBtn');
+if(themeBtn){ themeBtn.addEventListener('click', function(){ root.setAttribute('data-theme', root.getAttribute('data-theme')==='dark' ? 'light' : 'dark'); }); }
+
+/* ---------- saved checks ---------- */
+var state = {};
+try{ state = JSON.parse(localStorage.getItem('ecosentinel-status')||'{}') || {}; }catch(e){ state = {}; }
+function saveState(){ try{ localStorage.setItem('ecosentinel-status', JSON.stringify(state)); }catch(e){} }
+function getStatus(rank){ return state[rank] || 'pending'; }
+
+/* ---------- headline numbers ---------- */
+function countUp(el, to, dec){
+  if(reduce){ el.textContent = fmt(to, dec); return; }
+  var t0 = null, dur = 1500;
+  function step(t){ if(t0===null) t0 = t; var p = Math.min(1, (t-t0)/dur); var e = 1-Math.pow(1-p, 3); el.textContent = fmt(to*e, dec); if(p<1) requestAnimationFrame(step); }
+  requestAnimationFrame(step);
+}
+function buildStats(){
+  var items = [
+    {to:ST.lossHa, dec:0, u:'ha', l:'of vegetation turned to bare ground', s:'Jan 2023 to Jan 2026 \u00B7 about '+fmt(pitches(ST.lossHa))+' football pitches'},
+    {to:ST.hotspots, dec:0, u:'', l:'hotspots flagged', s:fmt(ST.over5)+' are bigger than 5 ha'},
+    {to:ST.topShare, dec:0, u:'%', l:'of the clearing is in 10 hotspots', s:'so teams can start with the biggest'},
+    {to:ST.checkedPct, dec:0, u:'%', l:'of the area could be checked', s:'clouds hid the rest in 2023'}
+  ];
+  var host = $('#stats');
+  host.innerHTML = items.map(function(it){ return '<div class="stat"><div class="k"><span class="num">0</span><span class="u">'+it.u+'</span></div><div class="l">'+it.l+'</div><div class="s">'+it.s+'</div></div>'; }).join('');
+  $$('.stat .num', host).forEach(function(el, i){ countUp(el, items[i].to, items[i].dec); });
+  var n = $('#ncp'); if(n) n.textContent = fmt(ST.notCheckedPct, 0)+'%';
+}
+
+/* ---------- viewer ---------- */
+var stage = $('#stage'), world = $('#world'), layB = $('#layB'), handle = $('#handle');
+var S = {s:0, tx:0, ty:0}, split = 0.5, minS = 0.1, maxS = 3, selected = 0;
+var KM_PER_PX = (B.r-B.l)*111.32*Math.cos(((B.t+B.b)/2)*Math.PI/180)/W;
+
+function zsize(){ var r = stage.getBoundingClientRect(); return {w:r.width, h:r.height, l:r.left, t:r.top}; }
+function clampS(v){ return Math.max(minS, Math.min(maxS, v)); }
+function clampPan(){
+  var z = zsize(), ww = W*S.s, hh = H*S.s;
+  S.tx = ww<=z.w ? (z.w-ww)/2 : Math.min(0, Math.max(z.w-ww, S.tx));
+  S.ty = hh<=z.h ? (z.h-hh)/2 : Math.min(0, Math.max(z.h-hh, S.ty));
+}
+function positionHandle(){ handle.style.transform = 'translateX('+(S.tx + split*W*S.s)+'px)'; }
+function updateScale(){
+  var pxPerKm = S.s/KM_PER_PX, opts = [0.1,0.2,0.5,1,2,5,10], pick = opts[0];
+  for(var i=0;i<opts.length;i++){ if(opts[i]*pxPerKm <= 130) pick = opts[i]; }
+  var bar = $('#scaleBar'), txt = $('#scaleTxt');
+  if(bar) bar.style.width = Math.max(10, pick*pxPerKm)+'px';
+  if(txt) txt.textContent = pick<1 ? (pick*1000)+' m' : pick+' km';
+}
+function render(){
+  clampPan();
+  world.style.transform = 'translate('+S.tx+'px,'+S.ty+'px) scale('+S.s+')';
+  world.style.setProperty('--s', S.s);
+  positionHandle(); updateScale();
+}
+function setSplit(x){
+  split = Math.max(0, Math.min(1, x));
+  layB.style.clipPath = 'inset(0 0 0 '+(split*100)+'%)';
+  handle.setAttribute('aria-valuenow', String(Math.round(split*100)));
+  positionHandle();
+}
+function fitScale(){ var z = zsize(); if(!z.w || !z.h) return 0.3; return Math.min(z.w/W, z.h/H); }
+function recalcLimits(){ minS = fitScale(); maxS = Math.max(2.2, minS*7); }
+function initialView(){
+  var z = zsize(); recalcLimits();
+  if(z.w < 700){ S.s = clampS(z.h/H); S.tx = z.w/2 - 0.3*W*S.s; S.ty = 0; }
+  else { S.s = minS; S.tx = 0; S.ty = 0; }
+  render();
+}
+function withFly(fn){
+  if(reduce){ fn(); return; }
+  world.classList.add('fly'); handle.classList.add('fly'); fn();
+  setTimeout(function(){ world.classList.remove('fly'); handle.classList.remove('fly'); }, 800);
+}
+function zoomAt(px, py, f){
+  var ns = clampS(S.s*f), k = ns/S.s;
+  S.tx = px-(px-S.tx)*k; S.ty = py-(py-S.ty)*k; S.s = ns; render();
+}
+function flyTo(h){
+  var z = zsize(), bw = (h.x1-h.x0)+80, bh = (h.y1-h.y0)+80;
+  var ns = clampS(Math.max(minS*1.6, Math.min(z.w*0.5/bw, z.h*0.6/bh)));
+  withFly(function(){
+    S.s = ns; S.tx = z.w/2 - h.cx*ns; S.ty = z.h/2 - h.cy*ns;
+    setSplit(h.cx/W); render();
+  });
+}
+
+/* pan and pinch */
+var ptrs = {}, drag = null, pinch = null, handleDrag = false;
+function dist(a,b){ var dx=a.x-b.x, dy=a.y-b.y; return Math.sqrt(dx*dx+dy*dy); }
+stage.addEventListener('pointerdown', function(e){
+  if(e.target.closest && (e.target.closest('.handle') || e.target.closest('.pin'))) return;
+  if(stage.setPointerCapture){ try{ stage.setPointerCapture(e.pointerId); }catch(err){} }
+  ptrs[e.pointerId] = {x:e.clientX, y:e.clientY};
+  var ids = Object.keys(ptrs);
+  if(ids.length === 1){ drag = {x:e.clientX, y:e.clientY, tx:S.tx, ty:S.ty}; stage.classList.add('grab'); }
+  else if(ids.length === 2){ drag = null; pinch = {d:dist(ptrs[ids[0]], ptrs[ids[1]]) || 1, s:S.s}; }
+});
+stage.addEventListener('pointermove', function(e){
+  var z = zsize();
+  readout(e.clientX - z.l, e.clientY - z.t);
+  if(!ptrs[e.pointerId]) return;
+  ptrs[e.pointerId] = {x:e.clientX, y:e.clientY};
+  var ids = Object.keys(ptrs);
+  if(ids.length === 1 && drag){ S.tx = drag.tx + (e.clientX-drag.x); S.ty = drag.ty + (e.clientY-drag.y); render(); }
+  else if(ids.length === 2 && pinch){
+    var a = ptrs[ids[0]], b = ptrs[ids[1]];
+    var ns = clampS(pinch.s * dist(a,b)/pinch.d), k = ns/S.s;
+    var cx = (a.x+b.x)/2 - z.l, cy = (a.y+b.y)/2 - z.t;
+    S.tx = cx-(cx-S.tx)*k; S.ty = cy-(cy-S.ty)*k; S.s = ns; render();
+  }
+});
+function endPtr(e){
+  delete ptrs[e.pointerId];
+  var ids = Object.keys(ptrs);
+  if(ids.length < 2) pinch = null;
+  if(ids.length === 1){ var p = ptrs[ids[0]]; drag = {x:p.x, y:p.y, tx:S.tx, ty:S.ty}; }
+  else if(ids.length === 0){ drag = null; stage.classList.remove('grab'); }
+}
+stage.addEventListener('pointerup', endPtr);
+stage.addEventListener('pointercancel', endPtr);
+stage.addEventListener('wheel', function(e){
+  e.preventDefault();
+  var z = zsize();
+  zoomAt(e.clientX - z.l, e.clientY - z.t, Math.exp(-e.deltaY*0.0016));
+}, {passive:false});
+stage.addEventListener('keydown', function(e){
+  var z = zsize();
+  if(e.key === '+' || e.key === '='){ zoomAt(z.w/2, z.h/2, 1.4); }
+  else if(e.key === '-' || e.key === '_'){ zoomAt(z.w/2, z.h/2, 1/1.4); }
+  else if(e.key === '0'){ withFly(initialView); }
+});
+
+/* comparison handle */
+function splitFromEvent(e){ var z = zsize(); return (e.clientX - z.l - S.tx)/(W*S.s); }
+handle.addEventListener('pointerdown', function(e){
+  e.stopPropagation(); handleDrag = true;
+  if(handle.setPointerCapture){ try{ handle.setPointerCapture(e.pointerId); }catch(err){} }
+});
+handle.addEventListener('pointermove', function(e){ if(handleDrag) setSplit(splitFromEvent(e)); });
+function endHandle(){ handleDrag = false; }
+handle.addEventListener('pointerup', endHandle);
+handle.addEventListener('pointercancel', endHandle);
+handle.addEventListener('keydown', function(e){
+  if(e.key === 'ArrowLeft'){ setSplit(split-0.03); e.preventDefault(); }
+  else if(e.key === 'ArrowRight'){ setSplit(split+0.03); e.preventDefault(); }
+});
+
+/* readout */
+function readout(px, py){
+  var ix = (px - S.tx)/S.s, iy = (py - S.ty)/S.s, el = $('#coords');
+  if(!el) return;
+  if(ix<0 || iy<0 || ix>W || iy>H){ return; }
+  var lon = B.l + ix/W*(B.r-B.l), lat = B.t - iy/H*(B.t-B.b);
+  el.textContent = ll(lat, lon, 4);
+}
+
+/* toolbar */
+$$('.seg button').forEach(function(b){
+  b.addEventListener('click', function(){
+    $$('.seg button').forEach(function(x){ x.classList.toggle('on', x===b); });
+    stage.setAttribute('data-mode', b.getAttribute('data-mode'));
+    $('#legend').style.display = b.getAttribute('data-mode')==='ndvi' ? 'flex' : 'none';
+  });
+});
+$$('.tg').forEach(function(b){
+  b.addEventListener('click', function(){
+    var on = b.getAttribute('aria-pressed') !== 'true';
+    b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on);
+    stage.setAttribute('data-'+b.getAttribute('data-layer'), on ? 'on' : 'off');
+  });
+});
+$('#zin').addEventListener('click', function(){ var z = zsize(); withFly(function(){ zoomAt(z.w/2, z.h/2, 1.6); }); });
+$('#zout').addEventListener('click', function(){ var z = zsize(); withFly(function(){ zoomAt(z.w/2, z.h/2, 1/1.6); }); });
+$('#zreset').addEventListener('click', function(){ withFly(function(){ setSplit(0.5); initialView(); }); });
+
+/* ---------- pins and list ---------- */
+function buildPins(){
+  $('#pins').innerHTML = HS.map(function(h){
+    var d = Math.round(Math.max(28, Math.min(56, 18 + Math.sqrt(h.ha)*3.4)));
+    return '<button class="pin k-'+h.kind+'" data-rank="'+h.rank+'" style="left:'+h.cx+'px;top:'+h.cy+'px;--d:'+d+'px" aria-label="Hotspot '+h.rank+', '+fmt(h.ha,1)+' hectares"><i class="ring"></i><i class="core">'+h.rank+'</i></button>';
+  }).join('');
+  $$('.pin').forEach(function(p){ p.addEventListener('click', function(e){ e.stopPropagation(); select(+p.getAttribute('data-rank'), true); }); });
+}
+function buildList(){
+  $('#list').innerHTML = HS.map(function(h){
+    return '<button class="hs" data-rank="'+h.rank+'" aria-current="false"><img alt="" src="'+h.after+'"><span class="hs-main"><span class="hs-top"><b>#'+h.rank+'</b><span>'+fmt(h.ha,1)+' ha</span><span class="chip pr-'+prio(h.ha)+'">'+PRIO[prio(h.ha)]+'</span></span><span class="hs-sub mono">'+ll(h.lat,h.lon,4)+'</span></span><i class="dot" data-dot="'+h.rank+'"></i></button>';
+  }).join('');
+  $$('.hs').forEach(function(b){ b.addEventListener('click', function(){ select(+b.getAttribute('data-rank'), true); }); });
+}
+function paintDots(){
+  $$('[data-dot]').forEach(function(d){ var s = getStatus(+d.getAttribute('data-dot')); d.className = 'dot' + (s==='pending' ? '' : ' s-'+s); d.title = STATUS[s]; });
+}
+
+/* ---------- detail ---------- */
+function toast(msg){
+  var t = $('#toast'); if(!t) return; t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 1600);
+}
+function renderDetail(h){
+  var p = prio(h.ha), s = getStatus(h.rank), mine = h.kind === 'mine';
+  var title = mine ? 'Cleared land beside the licensed mine' : 'New clearing inside the forest';
+  var note = mine ? 'The biggest change in the area. It sits right next to industrial mining ground, so it is most likely a mine expansion. Check the licence boundary before treating it as illegal.'
+                  : 'Dense vegetation in 2023, bare ground in 2026, along a stream valley. This is often what small-scale mining looks like from above, but only a visit can confirm it.';
+  var vb = VOPTS.map(function(o){ return '<button class="vb" data-v="'+o[0]+'" aria-pressed="'+(s===o[0])+'"><i class="dot '+(s===o[0] ? 's-'+o[0] : '')+'"></i>'+o[1]+'</button>'; }).join('');
+  $('#detail').innerHTML =
+    '<div class="d-head"><div><div class="eyebrow">Hotspot #'+h.rank+'</div><h3>'+fmt(h.ha,1)+' ha cleared</h3><p class="muted small">About '+fmt(pitches(h.ha))+' football pitches</p></div><span class="chip pr-'+p+'">'+PRIO[p]+'</span></div>'
+  + '<div class="d-th"><figure><img alt="Satellite view before, January 2023" src="'+h.before+'"><figcaption>JAN 2023</figcaption></figure><figure><img alt="Satellite view after, January 2026, with the change outlined" src="'+h.after+'"><figcaption>JAN 2026</figcaption></figure></div>'
+  + '<dl class="kv"><dt>Where</dt><dd class="mono">'+ll(h.lat,h.lon,4)+' <button class="btn sm" id="copyBtn">Copy</button></dd><dt>What</dt><dd>'+title+'</dd></dl>'
+  + '<p class="note">'+note+'</p>'
+  + '<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps?q='+h.lat+','+h.lon+'">Open in Maps for the field team</a>'
+  + '<div class="vlabel">Verification</div><div class="vgrid" id="vgrid">'+vb+'</div>';
+  var cb = $('#copyBtn');
+  cb.addEventListener('click', function(){
+    var txt = h.lat+', '+h.lon;
+    try{ navigator.clipboard.writeText(txt).then(function(){ toast('Coordinates copied'); }, function(){ toast(txt); }); }catch(e){ toast(txt); }
+  });
+  $$('#vgrid .vb').forEach(function(b){
+    b.addEventListener('click', function(){
+      var v = b.getAttribute('data-v');
+      if(state[h.rank] === v){ delete state[h.rank]; } else { state[h.rank] = v; }
+      saveState(); renderDetail(h); paintDots(); renderQueue();
+    });
+  });
+}
+function select(rank, fly){
+  selected = rank;
+  var h = HS[rank-1];
+  $$('.hs').forEach(function(b){ b.setAttribute('aria-current', String(+b.getAttribute('data-rank') === rank)); });
+  $$('.pin').forEach(function(p){ p.classList.toggle('sel', +p.getAttribute('data-rank') === rank); });
+  renderDetail(h);
+  if(fly) flyTo(h);
+}
+
+/* ---------- verification queue ---------- */
+function renderQueue(){
+  var keys = ['pending','field','confirmed','licensed','dismissed'], counts = {};
+  keys.forEach(function(k){ counts[k] = 0; });
+  HS.forEach(function(h){ counts[getStatus(h.rank)]++; });
+  var cols = {pending:'var(--muted)', field:'var(--warn)', confirmed:'var(--danger)', licensed:'var(--accent)', dismissed:'var(--muted)'};
+  var ops = {pending:.25, field:1, confirmed:1, licensed:1, dismissed:.6};
+  var bar = keys.map(function(k){ return '<i style="width:'+(counts[k]/HS.length*100)+'%;background:'+cols[k]+';opacity:'+ops[k]+'"></i>'; }).join('');
+  var li = keys.map(function(k){ return '<li><i class="dot '+(k==='pending'?'':'s-'+k)+'"></i>'+STATUS[k]+'<b>'+counts[k]+'</b></li>'; }).join('');
+  $('#queue').innerHTML = '<div class="card-h"><h3>Verification queue</h3><button class="link" id="resetQ">Reset</button></div><div class="qbar">'+bar+'</div><ul class="qlist">'+li+'</ul><p class="small muted">Nothing is acted on until a person has checked it. Your choices are kept in this browser.</p>';
+  $('#resetQ').addEventListener('click', function(){ state = {}; saveState(); paintDots(); renderQueue(); if(selected) renderDetail(HS[selected-1]); });
+}
+
+/* ---------- charts ---------- */
+function buildCharts(){
+  var max = HS[0].ha;
+  $('#bars').innerHTML = HS.map(function(h){
+    return '<button class="brow" data-rank="'+h.rank+'"><span class="bn mono">#'+h.rank+'</span><span class="bt"><i class="k-'+h.kind+'" style="width:'+(h.ha/max*100)+'%"></i></span><span class="bv mono">'+fmt(h.ha,1)+'</span></button>';
+  }).join('');
+  $$('#bars .brow').forEach(function(b){ b.addEventListener('click', function(){ select(+b.getAttribute('data-rank'), true); $('#stage').scrollIntoView({behavior: reduce?'auto':'smooth', block:'center'}); }); });
+
+  var segs = [{v:ST.streamHa, c:'var(--danger)', l:'Forest and stream areas'}, {v:ST.mineHa, c:'var(--warn)', l:'Beside the licensed mine'}, {v:ST.townHa, c:'var(--muted)', l:'Town and open land'}];
+  var tot = segs.reduce(function(a,s){ return a+s.v; }, 0), R = 52, C = 2*Math.PI*R, acc = 0;
+  var arcs = segs.map(function(s){
+    var len = s.v/tot*C, el = '<circle cx="70" cy="70" r="'+R+'" fill="none" style="stroke:'+s.c+'" stroke-width="18" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-acc)+'" transform="rotate(-90 70 70)"></circle>';
+    acc += len; return el;
+  }).join('');
+  $('#donut').innerHTML = '<svg viewBox="0 0 140 140" width="150" height="150" role="img" aria-label="Where the new bare ground is">'+arcs+'<text x="70" y="68" text-anchor="middle" style="font:800 24px Bricolage Grotesque,sans-serif;fill:var(--text)">'+fmt(tot)+'</text><text x="70" y="86" text-anchor="middle" style="font:500 11px IBM Plex Mono,monospace;fill:var(--muted)">hectares</text></svg>'
+    + '<ul class="leg">'+segs.map(function(s){ return '<li><i style="background:'+s.c+'"></i><span>'+s.l+'<b>'+fmt(s.v)+' ha</b></span></li>'; }).join('')+'</ul>';
+
+  function row(y, s){ return '<div class="srow"><span class="mono small muted">'+y+'</span><div class="stack"><i class="sd" style="width:'+(s.dense*100)+'%"></i><i class="smix" style="width:'+(s.mixed*100)+'%"></i><i class="sbare" style="width:'+(s.bare*100)+'%"></i></div></div>'; }
+  var a = ST.share23, b = ST.share26;
+  $('#shares').innerHTML = row('2023', a) + row('2026', b)
+    + '<ul class="leg" style="flex-direction:row;flex-wrap:wrap;gap:6px 16px"><li><i style="background:var(--accent)"></i>Dense vegetation</li><li><i style="background:var(--muted);opacity:.55"></i>Mixed</li><li><i style="background:var(--danger)"></i>Bare ground</li></ul>'
+    + '<div class="callout">Bare ground grew from <b>'+(a.bare*100).toFixed(1)+'%</b> to <b>'+(b.bare*100).toFixed(1)+'%</b> of the checked area in three years.</div>';
+}
+
+/* ---------- start ---------- */
+function setImages(){
+  $('#layA .tc').src = D.img.tc23; $('#layA .ndvi').src = D.img.ndvi23;
+  $('#layB .tc').src = D.img.tc26; $('#layB .ndvi').src = D.img.ndvi26;
+  $('#imgChange').src = D.img.change; $('#imgMask').src = D.img.mask;
+}
+function finishIntro(){
+  var b = $('#badge'); b.classList.remove('scanning');
+  $('#badgeTxt').textContent = 'Scan complete: '+fmt(ST.hotspots)+' hotspots flagged';
+  $('#scan').style.display = 'none';
+  $('#imgChange').classList.remove('reveal');
+}
+function intro(){
+  if(reduce){ finishIntro(); return; }
+  $('#imgChange').classList.add('reveal'); $('#scan').classList.add('go'); $('#pins').classList.add('late');
+  setTimeout(finishIntro, 2800);
+}
+function onResize(){
+  var was = minS; recalcLimits();
+  if(!S.s){ initialView(); return; }
+  if(S.s < minS) S.s = minS;
+  render();
+}
+function boot(){
+  buildStats(); buildPins(); buildList(); buildCharts(); renderQueue(); paintDots();
+  setSplit(0.5); initialView(); select(1, false);
+  if(typeof ResizeObserver !== 'undefined'){ new ResizeObserver(onResize).observe(stage); } else { window.addEventListener('resize', onResize); }
+  setImages();
+  var imgs = $$('#world img');
+  var waits = imgs.map(function(i){ return (i.decode ? i.decode().catch(function(){}) : Promise.resolve()); });
+  Promise.all(waits).then(function(){ stage.classList.add('ready'); initialView(); intro(); });
+  setTimeout(function(){ if(!stage.classList.contains('ready')){ stage.classList.add('ready'); initialView(); intro(); } }, 6000);
+}
+boot();
+})();
+</script>
+</body>
+</html>
