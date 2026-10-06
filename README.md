@@ -2,7 +2,7 @@
 
 Satellite early warning for illegal mining in Ghana's forests. This is a working prototype built on real Sentinel-2 satellite images.
 
-**Live dashboard:** https://YOUR-SITE-NAME.netlify.app
+**Live dashboard:** https://ecosentinel-ai-gh.netlify.app
 
 **Pilot area:** Obuasi and Amansie West, Ashanti Region, Ghana (281 km²). Images from 31 January 2023 and 25 January 2026, both in the dry season so the two dates can be compared fairly.
 
