@@ -6,7 +6,6 @@ Satellite early warning for illegal mining in Ghana's forests. This is a working
 
 **Pilot area:** Obuasi and Amansie West, Ashanti Region, Ghana (281 km²). Images from 31 January 2023 and 25 January 2026, both in the dry season so the two dates can be compared fairly.
 
-**Concept and proposal:** add the proposal author's name here.
 
 ## What it does
 
